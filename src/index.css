@@ -1,0 +1,740 @@
+@import "tailwindcss";
+
+/* Tailwind v4 class-based dark mode (equivalent to darkMode: 'class') */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ============================================================
+   THEME TOKENS
+   Default (light) + .dark override. Every surface, border, and
+   SVG paint reads from these vars, so the toggle flips the whole
+   app without per-page dark: utilities.
+   ============================================================ */
+@theme {
+  --font-display: "Syne", "Space Grotesk", sans-serif;
+  --font-heading: "Space Grotesk", "Inter", sans-serif;
+  --font-body: "Inter", sans-serif;
+
+  /* Semantic surfaces — light values are the defaults */
+  --color-void: #f5f5f7;
+  --color-trough: #ffffff;
+  --color-surface: #ffffff;
+
+  --color-ink: #18181b;
+  --color-ink-mid: #52525b;
+  --color-ink-dim: #71717a;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    color-scheme: light;
+  }
+
+  html.dark {
+    color-scheme: dark;
+  }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    background-color: #f5f5f7;
+    color: #52525b;
+    font-family: var(--font-body);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  .dark body {
+    background-color: #0a0a0a;
+    color: #a1a1aa;
+  }
+
+  ::selection {
+    background: rgba(24, 24, 27, 0.15);
+    color: #18181b;
+  }
+  .dark ::selection {
+    background: rgba(228, 228, 231, 0.2);
+    color: #fafafa;
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #f5f5f7;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #d4d4d8;
+    border-radius: 999px;
+    border: 2px solid #f5f5f7;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #a1a1aa;
+  }
+  .dark ::-webkit-scrollbar-track {
+    background: #0a0a0a;
+  }
+  .dark ::-webkit-scrollbar-thumb {
+    background: #27272a;
+    border-color: #0a0a0a;
+  }
+  .dark ::-webkit-scrollbar-thumb:hover {
+    background: #3f3f46;
+  }
+
+  .material-symbols-outlined {
+    font-family: "Material Symbols Outlined";
+    font-weight: normal;
+    font-style: normal;
+    line-height: 1;
+    letter-spacing: normal;
+    text-transform: none;
+    display: inline-block;
+    white-space: nowrap;
+    word-wrap: normal;
+    direction: ltr;
+    font-variation-settings:
+      "FILL" 0,
+      "wght" 400,
+      "GRAD" 0,
+      "opsz" 24;
+    user-select: none;
+  }
+}
+
+/* ============================================================
+   ZINC SCALE — inverted per theme so existing text-zinc-100 /
+   text-zinc-400 classes stay semantically correct in both modes.
+   Light: zinc-100 is near-black (primary text).
+   Dark:  zinc-100 is near-white (primary text).
+   ============================================================ */
+@theme {
+  --color-zinc-50: #fafafa;
+  --color-zinc-100: #18181b;
+  --color-zinc-200: #27272a;
+  --color-zinc-300: #3f3f46;
+  --color-zinc-400: #52525b;
+  --color-zinc-500: #71717a;
+  --color-zinc-600: #a1a1aa;
+  --color-zinc-700: #d4d4d8;
+  --color-zinc-800: #e4e4e7;
+  --color-zinc-900: #fafafa;
+  --color-zinc-950: #ffffff;
+}
+
+@layer theme {
+  .dark {
+    --color-zinc-50: #fafafa;
+    --color-zinc-100: #fafafa;
+    --color-zinc-200: #e4e4e7;
+    --color-zinc-300: #d4d4d8;
+    --color-zinc-400: #a1a1aa;
+    --color-zinc-500: #71717a;
+    --color-zinc-600: #52525b;
+    --color-zinc-700: #3f3f46;
+    --color-zinc-800: #27272a;
+    --color-zinc-900: #18181b;
+    --color-zinc-950: #09090b;
+
+    --color-void: #0a0a0a;
+    --color-trough: #111111;
+    --color-surface: #1a1a1a;
+
+    --color-ink: #fafafa;
+    --color-ink-mid: #a1a1aa;
+    --color-ink-dim: #71717a;
+  }
+}
+
+/* Runtime paint vars (surfaces, borders, tints, SVG palette) */
+:root,
+.dark {
+  --tint: rgba(0, 0, 0, 0.03);
+  --tint-2: rgba(0, 0, 0, 0.04);
+  --tint-3: rgba(0, 0, 0, 0.06);
+  --tint-4: rgba(0, 0, 0, 0.08);
+  --tint-hover: rgba(0, 0, 0, 0.1);
+  --line: rgba(0, 0, 0, 0.08);
+  --line-strong: rgba(0, 0, 0, 0.12);
+  --accent-bg: #18181b;
+  --accent-fg: #fafafa;
+  --shadow-card: 0 16px 40px -16px rgba(0, 0, 0, 0.12);
+  --shadow-soft: 0 8px 24px -12px rgba(0, 0, 0, 0.1);
+
+  /* SVG illustration palette */
+  --svg-bg: #ffffff;
+  --svg-fg: #3f3f46;
+  --svg-muted: #71717a;
+  --svg-bright: #18181b;
+  --svg-line: rgba(24, 24, 27, 0.16);
+  --svg-line-soft: rgba(24, 24, 27, 0.1);
+  --svg-deep: #d4d4d8;
+  --svg-dim: #a1a1aa;
+}
+
+.dark {
+  --tint: rgba(255, 255, 255, 0.02);
+  --tint-2: rgba(255, 255, 255, 0.04);
+  --tint-3: rgba(255, 255, 255, 0.06);
+  --tint-4: rgba(255, 255, 255, 0.08);
+  --tint-hover: rgba(255, 255, 255, 0.12);
+  --line: rgba(255, 255, 255, 0.06);
+  --line-strong: rgba(255, 255, 255, 0.1);
+  --accent-bg: #fafafa;
+  --accent-fg: #0a0a0a;
+  --shadow-card: 0 16px 40px -16px rgba(0, 0, 0, 0.5);
+  --shadow-soft: 0 8px 24px -12px rgba(0, 0, 0, 0.4);
+
+  --svg-bg: #111111;
+  --svg-fg: #d4d4d8;
+  --svg-muted: #a1a1aa;
+  --svg-bright: #fafafa;
+  --svg-line: rgba(228, 228, 231, 0.2);
+  --svg-line-soft: rgba(228, 228, 231, 0.12);
+  --svg-deep: #3f3f46;
+  --svg-dim: #52525b;
+}
+
+@layer utilities {
+  /* ---------- Surfaces ----------
+     Flat matte panels. No glassmorphism, no blur, no glow. */
+  .panel {
+    background: var(--color-trough);
+    border: 1px solid var(--line);
+    border-radius: 1rem;
+    box-shadow: var(--shadow-soft);
+  }
+
+  .panel-soft {
+    background: var(--color-trough);
+    border: 1px solid var(--line);
+    border-radius: 0.875rem;
+    box-shadow: var(--shadow-soft);
+  }
+
+  .panel-media {
+    background: var(--color-trough);
+    border: 1px solid var(--line);
+    border-radius: 0.875rem;
+    overflow: hidden;
+    box-shadow: var(--shadow-soft);
+  }
+
+  /* Back-compat aliases used across pages */
+  .glass {
+    background: var(--color-trough);
+    border: 1px solid var(--line);
+    border-radius: 1rem;
+    box-shadow: var(--shadow-soft);
+  }
+  .glass-soft {
+    background: var(--color-trough);
+    border: 1px solid var(--line);
+    border-radius: 0.875rem;
+    box-shadow: var(--shadow-soft);
+  }
+  .glass-media {
+    background: var(--color-trough);
+    border: 1px solid var(--line);
+    border-radius: 0.875rem;
+    overflow: hidden;
+    box-shadow: var(--shadow-soft);
+  }
+  .rim {
+    border-color: var(--line);
+  }
+
+  /* Theme-aware tints & hairlines (replace bg-white/[..] / border-white/[..]) */
+  .bg-tint {
+    background-color: var(--tint-2);
+  }
+  .bg-tint-strong {
+    background-color: var(--tint-3);
+  }
+  .bg-tint-soft {
+    background-color: var(--tint);
+  }
+  .border-line {
+    border-color: var(--line);
+  }
+  .border-line-strong {
+    border-color: var(--line-strong);
+  }
+
+  /* ---------- Text ---------- */
+  .liquid-sheen,
+  .liquid-sheen-cyan,
+  .chrome-fill,
+  .chrome-vert {
+    color: var(--color-ink);
+  }
+
+  .font-display {
+    font-family: var(--font-display);
+  }
+  .font-heading {
+    font-family: var(--font-heading);
+  }
+  .font-body {
+    font-family: var(--font-body);
+  }
+
+  .label-xs {
+    font-family: var(--font-heading);
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    line-height: 1.2;
+  }
+
+  .label-sm {
+    font-family: var(--font-heading);
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    line-height: 1.3;
+  }
+
+  .body-copy {
+    font-family: var(--font-body);
+    color: var(--color-ink-mid);
+    line-height: 1.75;
+    font-size: 0.95rem;
+    font-weight: 400;
+  }
+
+  .eq {
+    font-family: var(--font-heading);
+    letter-spacing: 0.01em;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .stat-value {
+    font-family: var(--font-display);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1;
+    color: var(--color-ink);
+  }
+
+  /* ---------- Pills / badges ---------- */
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    border-radius: 9999px;
+    font-family: var(--font-heading);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .pill-glass {
+    background: var(--tint-3);
+    border: 1px solid var(--tint-4);
+    color: var(--color-ink-mid);
+  }
+
+  .pill-cyan {
+    background: var(--accent-bg);
+    border: 1px solid transparent;
+    color: var(--accent-fg);
+    font-weight: 500;
+  }
+
+  .dot-glow {
+    width: 5px;
+    height: 5px;
+    border-radius: 9999px;
+    background: var(--color-ink-dim);
+    flex-shrink: 0;
+  }
+
+  /* ---------- Buttons ---------- */
+  .btn-chrome {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.55rem;
+    border-radius: 9999px;
+    padding: 0.9rem 1.65rem;
+    font-family: var(--font-heading);
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    color: var(--accent-fg);
+    background: var(--accent-bg);
+    transition:
+      transform 0.25s ease,
+      background-color 0.25s ease,
+      color 0.25s ease,
+      box-shadow 0.25s ease;
+  }
+  .btn-chrome:hover {
+    transform: translate3d(0, -2px, 0);
+    box-shadow: var(--shadow-card);
+  }
+  .btn-chrome:active {
+    transform: translate3d(0, 0, 0);
+    box-shadow: none;
+  }
+  /* Hover accent — scoped so light/dark never fight over specificity */
+  .dark .btn-chrome:hover {
+    background: #e4e4e7;
+    color: #0a0a0a;
+  }
+  :root:not(.dark) .btn-chrome:hover {
+    background: #27272a;
+    color: #fafafa;
+  }
+
+  .btn-glass {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.55rem;
+    border-radius: 9999px;
+    padding: 0.9rem 1.65rem;
+    font-family: var(--font-heading);
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    color: var(--color-ink);
+    background: var(--tint-3);
+    border: 1px solid var(--tint-4);
+    transition:
+      transform 0.25s ease,
+      background-color 0.25s ease,
+      border-color 0.25s ease,
+      color 0.25s ease,
+      box-shadow 0.25s ease;
+  }
+  .btn-glass:hover {
+    transform: translate3d(0, -2px, 0);
+    background: var(--tint-hover);
+    border-color: var(--line-strong);
+    color: var(--color-ink-mid);
+    box-shadow: var(--shadow-soft);
+  }
+  .btn-glass:active {
+    transform: translate3d(0, 0, 0);
+    box-shadow: none;
+  }
+
+  /* ---------- Module cards ----------
+     Flat, quiet hover. Transform + opacity only. */
+  .module-card {
+    background: var(--color-trough);
+    border: 1px solid var(--line);
+    border-radius: 1rem;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    box-shadow: var(--shadow-soft);
+    transition:
+      transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+      background 0.3s ease,
+      box-shadow 0.3s ease;
+  }
+  .module-card:hover {
+    transform: translate3d(0, -2px, 0);
+    background: var(--color-surface);
+    box-shadow: var(--shadow-card);
+  }
+
+  /* ---------- Page shell ---------- */
+  .mesh-bg {
+    background: var(--color-void);
+  }
+
+  .noise-overlay::after {
+    display: none;
+  }
+
+  /* ---------- Timeline (Sejarah) ---------- */
+  .year-ghost {
+    font-family: var(--font-display);
+    font-weight: 600;
+    letter-spacing: -0.04em;
+    color: color-mix(in srgb, var(--color-ink) 4%, transparent);
+    line-height: 0.85;
+    user-select: none;
+    pointer-events: none;
+    white-space: nowrap;
+  }
+
+  .timeline-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 9999px;
+    background: var(--color-ink);
+  }
+
+  .timeline-line {
+    background: var(--line-strong);
+    width: 1px;
+  }
+
+  /* ---------- Media shells ---------- */
+  .play-btn {
+    width: 64px;
+    height: 64px;
+    border-radius: 9999px;
+    display: grid;
+    place-items: center;
+    background: var(--accent-bg);
+    color: var(--accent-fg);
+    transition: transform 0.3s ease;
+  }
+  .play-btn:hover {
+    transform: scale(1.04);
+    opacity: 0.92;
+  }
+
+  .progress-track {
+    height: 3px;
+    border-radius: 9999px;
+    background: var(--tint-4);
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    border-radius: 9999px;
+    background: var(--color-ink);
+  }
+
+  /* ---------- Callout ---------- */
+  .amber-box {
+    background: var(--tint-2);
+    border: 1px solid var(--tint-4);
+    border-radius: 0.75rem;
+  }
+
+  /* ---------- Chart helpers ---------- */
+  .donut-seg {
+    transition: opacity 0.3s ease;
+  }
+  .donut-seg:hover {
+    opacity: 0.8;
+  }
+
+  /* ---------- Temperature range slider (Simulasi3D) ---------- */
+  .temp-slider {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 6px;
+    border-radius: 999px;
+    background: var(--tint-4);
+    outline: none;
+    accent-color: var(--color-ink);
+  }
+  .temp-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    border-radius: 9999px;
+    background: var(--color-ink);
+    border: 2px solid var(--color-trough);
+    cursor: pointer;
+    box-shadow: 0 0 0 1px var(--line-strong);
+  }
+  .temp-slider::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+    border-radius: 9999px;
+    background: var(--color-ink);
+    border: 2px solid var(--color-trough);
+    cursor: pointer;
+    box-shadow: 0 0 0 1px var(--line-strong);
+  }
+
+  /* ---------- Horizontal module slider (SubNav) ---------- */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* ---------- Theme toggle button ---------- */
+  .theme-toggle {
+    transition:
+      background-color 0.22s ease,
+      border-color 0.22s ease,
+      color 0.22s ease,
+      transform 0.22s ease,
+      box-shadow 0.22s ease;
+  }
+  .theme-toggle:hover {
+    transform: translateY(-1px) scale(1.06);
+    background: var(--tint-hover);
+    border-color: var(--line-strong);
+    box-shadow: var(--shadow-soft);
+  }
+  .theme-toggle:active {
+    transform: translateY(0) scale(0.96);
+    box-shadow: none;
+  }
+  .theme-toggle-icon {
+    transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .theme-toggle:hover .theme-toggle-icon {
+    transform: rotate(45deg);
+  }
+
+  /* ---------- Image carousel controls ---------- */
+  .carousel-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+    display: grid;
+    place-items: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: 9999px;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    background: rgba(0, 0, 0, 0.5);
+    color: #ffffff;
+    cursor: pointer;
+    opacity: 0;
+    transition:
+      opacity 0.22s ease,
+      background-color 0.22s ease,
+      transform 0.22s ease;
+  }
+  /* Reveal on figure hover / focus / touch */
+  figure:hover .carousel-btn,
+  figure:focus-within .carousel-btn {
+    opacity: 1;
+  }
+  .carousel-btn:hover {
+    background: rgba(0, 0, 0, 0.8);
+    transform: translateY(-50%) scale(1.06);
+  }
+  .carousel-btn:active {
+    transform: translateY(-50%) scale(0.96);
+  }
+  /* Always visible on coarse pointers (mobile) */
+  @media (hover: none), (pointer: coarse) {
+    .carousel-btn {
+      opacity: 1;
+    }
+  }
+
+  /* ---------- Lite video facade (click-to-load) ---------- */
+  .video-facade {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: 100%;
+    border: 1px solid var(--line);
+    border-radius: 0.75rem;
+    background: var(--color-trough);
+    cursor: pointer;
+    overflow: hidden;
+    transition:
+      background-color 0.25s ease,
+      border-color 0.25s ease;
+  }
+  .video-facade:hover {
+    background: var(--color-surface);
+    border-color: var(--line-strong);
+  }
+  .video-facade:hover .play-btn {
+    transform: scale(1.06);
+  }
+  .video-facade:active .play-btn {
+    transform: scale(0.98);
+  }
+
+  /* ---------- External platform link (YouTube / TikTok) ---------- */
+  .ext-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    border-radius: 9999px;
+    border: 1px solid var(--tint-4);
+    background: var(--tint-3);
+    padding: 0.4rem 0.75rem;
+    font-family: var(--font-heading);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-ink-mid);
+    white-space: nowrap;
+    transition:
+      background-color 0.22s ease,
+      border-color 0.22s ease,
+      color 0.22s ease,
+      transform 0.22s ease;
+  }
+  .ext-link:hover {
+    background: var(--tint-hover);
+    border-color: var(--line-strong);
+    color: var(--color-ink);
+    transform: translateY(-1px);
+  }
+  .ext-link:active {
+    transform: translateY(0);
+  }
+
+  /* ---------- Footer / logo link ---------- */
+  .brand-link {
+    transition:
+      color 0.22s ease,
+      background-color 0.22s ease,
+      border-color 0.22s ease,
+      transform 0.22s ease;
+  }
+  .brand-link:hover {
+    transform: translateY(-1px);
+  }
+  .brand-link:hover .brand-mark {
+    background: var(--tint-hover);
+    border-color: var(--line-strong);
+    transform: scale(1.06);
+  }
+  .brand-link:hover .brand-word {
+    color: var(--color-ink-dim);
+  }
+  .brand-mark {
+    transition:
+      background-color 0.22s ease,
+      border-color 0.22s ease,
+      transform 0.22s ease;
+  }
+  .brand-word {
+    transition: color 0.22s ease;
+  }
+}
+
+/* Theme cross-fade — armed only while a light/dark toggle is in flight,
+   so ordinary hover/press transitions stay snappy the rest of the time. */
+.theme-anim,
+.theme-anim *,
+.theme-anim *::before,
+.theme-anim *::after {
+  transition:
+    background-color 0.35s ease,
+    border-color 0.35s ease,
+    color 0.35s ease,
+    fill 0.35s ease,
+    stroke 0.35s ease,
+    box-shadow 0.35s ease !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
